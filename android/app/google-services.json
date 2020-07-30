@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "620303741349",
+    "firebase_url": "https://saveme-82641.firebaseio.com",
+    "project_id": "saveme-82641",
+    "storage_bucket": "saveme-82641.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:620303741349:android:0b593d25f0d67b5ca4784c",
+        "android_client_info": {
+          "package_name": "app.saveme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "620303741349-mlrk7jmhl5h4qklv8nrbc2ncdjshdctm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.saveme",
+            "certificate_hash": "bcc416156fbd49c59e8648615c9cf1bf0d113b1f"
+          }
+        },
+        {
+          "client_id": "620303741349-82laggarf9vp1odjg2gkg05554o426q4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_u-88GGoxXaT-rQV3HTE1fehkHU8uHmA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "620303741349-82laggarf9vp1odjg2gkg05554o426q4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
