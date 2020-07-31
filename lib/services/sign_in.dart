@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:saveme/services/auth.dart';
@@ -12,6 +11,12 @@ class _SignInState extends State<SignIn> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
+  double loginOpacity = 1.0;
+  double signupOpacity = 0.0;
+
+  Color loginButtonColor = Colors.blue.shade200;
+  Color signupButtonColor = Colors.blue.shade200;
+
   String email = "";
   String password = "";
   String error = "";
@@ -22,8 +27,9 @@ class _SignInState extends State<SignIn> {
       appBar: AppBar(
         title: Text("Sign In"),
       ),
-      body: Container(
-        child: Center(
+      body: Center(
+        child: SingleChildScrollView(
+          physics: ScrollPhysics(),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -39,70 +45,166 @@ class _SignInState extends State<SignIn> {
                   padding: EdgeInsets.all(20.0),
                   child: Column(
                     children: [
-                      TextFormField(
-                        validator: (value) =>
-                            value.isEmpty ? 'Enter an email' : null,
-                        onChanged: (email_value) {
-                          setState(() {
-                            email = email_value;
-                          });
-                        },
-                      ),
-                      TextFormField(
-                        validator: (value) => value.length < 6
-                            ? 'Enter minimum 6 char. password'
-                            : null,
-                        onChanged: (password_value) {
-                          setState(() {
-                            password = password_value;
-                          });
-                        },
-                        obscureText: true,
-                      ),
-                      Text(
-                        error,
-                        style: TextStyle(
-                            fontSize: 13.0, color: Colors.red.shade400),
-                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          RaisedButton.icon(
+                          RaisedButton(
                             onPressed: () async {
-                              if (_formKey.currentState.validate()) {
-                                dynamic result = await _auth
-                                    .signInWithEmailPass(email, password);
-
-                                if (result == null) {
-                                  setState(() {
-                                    error = "Please enter a valid email";
-                                  });
-                                }
-                              }
+                              setState(() {
+                                loginOpacity = 1.0;
+                                signupOpacity = 0.0;
+                                loginButtonColor = Colors.blue.shade100;
+                                signupButtonColor = Colors.blue.shade200;
+                              });
                             },
-                            color: Colors.blue.shade200,
-                            icon: Icon(AntDesign.login),
-                            label: Text("Log In"),
+                            color: loginButtonColor,
+                            child: Text("Log In"),
                           ),
                           SizedBox(
                             width: 5.0,
                           ),
-                          RaisedButton.icon(
+                          RaisedButton(
                             onPressed: () async {
-                              if (_formKey.currentState.validate()) {
-                                dynamic result = await _auth
-                                    .signUpWithEmailPass(email, password);
-
-                                if (result == null) {
-                                  setState(() {
-                                    error = "Please enter a valid email";
-                                  });
-                                }
-                              }
+                              setState(() {
+                                loginOpacity = 0.0;
+                                signupOpacity = 1.0;
+                                loginButtonColor = Colors.blue.shade200;
+                                signupButtonColor = Colors.blue.shade100;
+                              });
                             },
-                            color: Colors.blue.shade200,
-                            icon: Icon(AntDesign.user),
-                            label: Text("Sign Up"),
+                            color: signupButtonColor,
+                            child: Text("Sign Up"),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 30.0),
+                      Stack(
+                        children: [
+                          Opacity(
+                            opacity: loginOpacity,
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  decoration: inpurDecoration.copyWith(
+                                    // labelText: 'Email',
+                                    hintText: "Email",
+                                    prefixIcon: Icon(AntDesign.mail),
+                                  ),
+                                  validator: (value) =>
+                                      value.isEmpty ? 'Enter an email' : null,
+                                  onChanged: (emailValue) {
+                                    setState(() {
+                                      email = emailValue;
+                                    });
+                                  },
+                                ),
+                                SizedBox(
+                                  height: 15.0,
+                                ),
+                                TextFormField(
+                                  decoration: inpurDecoration.copyWith(
+                                    // labelText: 'Password',
+                                    hintText: "Password",
+                                    prefixIcon: Icon(AntDesign.lock1),
+                                  ),
+                                  validator: (value) => value.length < 6
+                                      ? 'Enter minimum 6 char. password'
+                                      : null,
+                                  onChanged: (passwordValue) {
+                                    setState(() {
+                                      password = passwordValue;
+                                    });
+                                  },
+                                  obscureText: true,
+                                ),
+                                Text(
+                                  error,
+                                  style: TextStyle(
+                                      fontSize: 13.0,
+                                      color: Colors.red.shade400),
+                                ),
+                                RaisedButton.icon(
+                                  onPressed: () async {
+                                    if (_formKey.currentState.validate()) {
+                                      dynamic result = await _auth
+                                          .signInWithEmailPass(email, password);
+
+                                      if (result == null) {
+                                        setState(() {
+                                          error = "Please enter a valid email";
+                                        });
+                                      }
+                                    }
+                                  },
+                                  color: Colors.blue.shade200,
+                                  icon: Icon(AntDesign.login),
+                                  label: Text("Log In"),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Opacity(
+                            opacity: signupOpacity,
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  decoration: inpurDecoration.copyWith(
+                                    // labelText: 'Email',
+                                    hintText: "Email",
+                                    prefixIcon: Icon(AntDesign.mail),
+                                  ),
+                                  validator: (value) =>
+                                      value.isEmpty ? 'Enter an email' : null,
+                                  onChanged: (emailValue) {
+                                    setState(() {
+                                      email = emailValue;
+                                    });
+                                  },
+                                ),
+                                SizedBox(
+                                  height: 15.0,
+                                ),
+                                TextFormField(
+                                  decoration: inpurDecoration.copyWith(
+                                    // labelText: 'Password',
+                                    hintText: "Password",
+                                    prefixIcon: Icon(AntDesign.lock1),
+                                  ),
+                                  validator: (value) => value.length < 6
+                                      ? 'Enter minimum 6 char. password'
+                                      : null,
+                                  onChanged: (passwordValue) {
+                                    setState(() {
+                                      password = passwordValue;
+                                    });
+                                  },
+                                  obscureText: true,
+                                ),
+                                Text(
+                                  error,
+                                  style: TextStyle(
+                                      fontSize: 13.0,
+                                      color: Colors.red.shade400),
+                                ),
+                                RaisedButton.icon(
+                                  onPressed: () async {
+                                    if (_formKey.currentState.validate()) {
+                                      dynamic result = await _auth
+                                          .signUpWithEmailPass(email, password);
+
+                                      if (result == null) {
+                                        setState(() {
+                                          error = "Please enter a valid email";
+                                        });
+                                      }
+                                    }
+                                  },
+                                  color: Colors.blue.shade200,
+                                  icon: Icon(AntDesign.login),
+                                  label: Text("Sign up"),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -138,3 +240,9 @@ class _SignInState extends State<SignIn> {
     );
   }
 }
+
+const InputDecoration inpurDecoration = InputDecoration(
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+  ),
+);
