@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:saveme/enterance/components/rounded_button.dart';
+import 'package:saveme/enterance/login/login_screen.dart';
 import 'package:saveme/enterance/signup/signup_screen.dart';
 import 'package:saveme/enterance/welcome/components/background.dart';
 import '../../../constants.dart';
@@ -32,7 +33,7 @@ class Body extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return Container();
+                      return LogInScreen();
                     },
                   ),
                 );
