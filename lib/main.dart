@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:saveme/constants.dart';
-import 'package:saveme/model/user.dart';
+import 'package:saveme/model/user_model.dart';
 import 'package:saveme/pages/wrapper.dart';
 import 'package:saveme/services/auth.dart';
 
@@ -16,9 +16,8 @@ class MyApp extends StatelessWidget {
       value: AuthService().user,
       child: MaterialApp(
         theme: ThemeData(
-          primaryColor: kPrimaryColor,
-        ),
-        // home: Wrapper(),
+            primaryColor: Colors.yellow.shade300,
+            accentColor: Colors.yellow.shade400),
         home: Wrapper(),
       ),
     );

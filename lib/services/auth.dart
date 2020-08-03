@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:saveme/model/user.dart';
+import 'package:saveme/model/user_model.dart';
+import 'package:saveme/services/database.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -70,7 +70,7 @@ class AuthService {
       final FirebaseUser user =
           (await _auth.signInWithCredential(credential)).user;
 
-      return user;
+      return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
     }

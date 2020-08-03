@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:saveme/enterance/components/already_have_an_account_check.dart';
 import 'package:saveme/enterance/components/rounded_button.dart';
 import 'package:saveme/enterance/components/rounded_input_field.dart';
 import 'package:saveme/enterance/components/rounded_password_field.dart';
-import 'package:saveme/enterance/login/login_screen.dart';
 import 'package:saveme/enterance/signup/components/bottom.dart';
 import 'package:saveme/enterance/signup/components/divider.dart';
 import 'package:saveme/enterance/welcome/components/background.dart';
@@ -116,12 +114,15 @@ class _BodyState extends State<Body> {
                         loading = true;
                       });
                       dynamic result = await _auth.signInAnon();
-                      setState(() {
-                        loading = false;
-                      });
                       if (result == null) {
-                        print("couldn't sign in");
+                        setState(() {
+                          loading = false;
+                          print("couldn't sign in");
+                        });
                       } else {
+                        setState(() {
+                          loading = false;
+                        });
                         print("signed in");
                       }
                     },

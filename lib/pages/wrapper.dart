@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:saveme/enterance/signup/signup_screen.dart';
-import 'package:saveme/model/user.dart';
-import 'package:saveme/pages/authenticate.dart';
+import 'package:saveme/model/user_model.dart';
+import 'package:saveme/pages/homepage.dart';
 
 class Wrapper extends StatefulWidget {
   @override
@@ -14,6 +14,6 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
 
-    return user == null ? SignUpScreen() : Authenticate();
+    return user != null ? HomePage() : SignUpScreen();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -17,8 +18,10 @@ class _SingleNoteState extends State<SingleNote> {
     readNote();
   }
 
-  readNote() {
-    CollectionReference colRef = Firestore.instance.collection("notes");
+  readNote() async {
+    var user = await FirebaseAuth.instance.currentUser();
+    CollectionReference colRef =
+        Firestore.instance.collection("notes-${user.uid}");
     colRef.snapshots().listen((snapshots) {
       setState(() {
         data = snapshots.documents;
@@ -29,9 +32,7 @@ class _SingleNoteState extends State<SingleNote> {
   @override
   Widget build(BuildContext context) {
     return data == null
-        ? CupertinoActivityIndicator(
-            radius: 20.0,
-          )
+        ? Container()
         : StaggeredGridView.countBuilder(
             crossAxisCount: 4,
             itemCount: data.length ?? 0,
