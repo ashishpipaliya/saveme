@@ -4,9 +4,10 @@ import 'package:saveme/model/user_model.dart';
 import 'package:saveme/services/database.dart';
 
 class ViewNote extends StatefulWidget {
-  final String title, description;
-
-  const ViewNote({Key key, this.title, this.description}) : super(key: key);
+  final String title, description, lastEdit, docId;
+  const ViewNote(
+      {Key key, this.title, this.description, this.lastEdit, this.docId})
+      : super(key: key);
   @override
   _ViewNoteState createState() => _ViewNoteState();
 }
@@ -24,23 +25,33 @@ class _ViewNoteState extends State<ViewNote> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
+    DatabaseService dbService = DatabaseService(uid: "notes-${user.uid}");
 
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(icon: Icon(Icons.delete_outline), onPressed: () async {}),
           IconButton(
-            icon: Icon(Icons.save),
+              icon: Icon(Icons.delete_outline),
+              onPressed: () async {
+                dbService.deleteNote("notes-${user.uid}", widget.docId);
+                Navigator.pop(context);
+              }),
+          IconButton(
+            icon: Icon(Icons.update),
             onPressed: () {
               if (_title.text.isNotEmpty || _description.text.isNotEmpty) {
-                DatabaseService(uid: "notes-${user.uid}")
-                    .updateNote(_title.text, _description.text);
+                if (widget.docId == null) {
+                  dbService.addNote(_title.text, _description.text);
+                } else {
+                  dbService.updateNote("notes-${user.uid}", widget.docId,
+                      _title.text, _description.text);
+                }
               } else {
                 print("enter inputs");
               }
               Navigator.pop(context);
             },
-          )
+          ),
         ],
       ),
       body: SafeArea(
@@ -80,7 +91,7 @@ class _ViewNoteState extends State<ViewNote> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(icon: Icon(Icons.add_box), onPressed: () {}),
-            Text("Edited ${DateTime.now()}"),
+            Text("Last Edit ${widget.lastEdit}"),
             IconButton(icon: Icon(Icons.menu), onPressed: () {})
           ],
         ),

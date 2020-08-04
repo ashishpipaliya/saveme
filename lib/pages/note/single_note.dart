@@ -39,6 +39,8 @@ class _SingleNoteState extends State<SingleNote> {
             itemBuilder: (context, index) {
               var title = data[index]["title"];
               var description = data[index]["description"];
+              var lastEdit = data[index]["lastEdit"];
+              var docId = data[index]["docId"];
 
               return GestureDetector(
                 onTap: () {
@@ -46,6 +48,8 @@ class _SingleNoteState extends State<SingleNote> {
                     builder: (context) => ViewNote(
                       title: title,
                       description: description,
+                      lastEdit: lastEdit,
+                      docId: docId,
                     ),
                   ));
                 },
@@ -55,7 +59,7 @@ class _SingleNoteState extends State<SingleNote> {
                       border: Border.all(
                           width: 1.0,
                           style: BorderStyle.solid,
-                          color: Colors.grey),
+                          color: Colors.grey.shade300),
                       borderRadius: BorderRadius.circular(5.0)),
                   padding: EdgeInsets.all(5.0),
                   child: Column(
