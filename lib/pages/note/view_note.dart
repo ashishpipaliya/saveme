@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:saveme/model/user_model.dart';
 import 'package:saveme/services/database.dart';
@@ -14,6 +16,7 @@ class ViewNote extends StatefulWidget {
 
 class _ViewNoteState extends State<ViewNote> {
   TextEditingController _title, _description;
+  var lastEdit = DateFormat('MMM d yyyy, h:mm aa').format(DateTime.now());
 
   @override
   void initState() {
@@ -47,7 +50,8 @@ class _ViewNoteState extends State<ViewNote> {
                       _title.text, _description.text);
                 }
               } else {
-                print("enter inputs");
+                Scaffold.of(context).showSnackBar(
+                    SnackBar(content: Text("Empty note discarded")));
               }
               Navigator.pop(context);
             },
@@ -55,33 +59,49 @@ class _ViewNoteState extends State<ViewNote> {
         ],
       ),
       body: SafeArea(
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 5.0),
-          padding: EdgeInsets.all(5.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Column(
-                  children: [
-                    TextField(
-                      controller: _title,
-                      maxLines: null,
-                      decoration: inputDecoration.copyWith(hintText: "Title"),
-                      style: TextStyle(
-                          fontSize: 20.0, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 5.0,
-                    ),
-                    TextField(
-                      controller: _description,
-                      maxLines: null,
-                      decoration: inputDecoration.copyWith(hintText: "Note"),
-                      style: TextStyle(fontSize: 18.0),
-                    ),
-                  ],
-                ),
-              ],
+        child: WillPopScope(
+          onWillPop: () async {
+            if (_title.text.isNotEmpty || _description.text.isNotEmpty) {
+              if (widget.docId == null) {
+                dbService.addNote(_title.text, _description.text);
+              } else {
+                dbService.updateNote("notes-${user.uid}", widget.docId,
+                    _title.text, _description.text);
+              }
+            } else {
+              Scaffold.of(context).showSnackBar(
+                  SnackBar(content: Text("Empty note discarded")));
+            }
+            return true;
+          },
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 5.0),
+            padding: EdgeInsets.all(5.0),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Column(
+                    children: [
+                      TextField(
+                        controller: _title,
+                        maxLines: null,
+                        decoration: inputDecoration.copyWith(hintText: "Title"),
+                        style: TextStyle(
+                            fontSize: 20.0, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      TextField(
+                        controller: _description,
+                        maxLines: null,
+                        decoration: inputDecoration.copyWith(hintText: "Note"),
+                        style: TextStyle(fontSize: 18.0),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -91,10 +111,19 @@ class _ViewNoteState extends State<ViewNote> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(icon: Icon(Icons.add_box), onPressed: () {}),
-            Text("Last Edit ${widget.lastEdit}"),
+            Text("Last Edit ${widget.lastEdit ?? lastEdit} "),
             IconButton(icon: Icon(Icons.menu), onPressed: () {})
           ],
         ),
+      ),
+    );
+  }
+
+  void _showToast(BuildContext context) {
+    final scaffold = Scaffold.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: const Text('Empty note discarded'),
       ),
     );
   }

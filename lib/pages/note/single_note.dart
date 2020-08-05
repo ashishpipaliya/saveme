@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:saveme/page_route.dart';
 import 'package:saveme/pages/note/view_note.dart';
 
 class SingleNote extends StatefulWidget {
@@ -44,14 +45,16 @@ class _SingleNoteState extends State<SingleNote> {
 
               return GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ViewNote(
-                      title: title,
-                      description: description,
-                      lastEdit: lastEdit,
-                      docId: docId,
-                    ),
-                  ));
+                  Navigator.push(
+                      context,
+                      FadeRoute(
+                        page: ViewNote(
+                          title: title,
+                          description: description,
+                          lastEdit: lastEdit,
+                          docId: docId,
+                        ),
+                      ));
                 },
                 child: Container(
                   margin: EdgeInsets.all(4.0),
@@ -66,11 +69,16 @@ class _SingleNoteState extends State<SingleNote> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text(title,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontSize: 20.0, fontWeight: FontWeight.bold)),
+                      title.length == 0
+                          ? Container(
+                              width: 0.0,
+                              height: 0.0,
+                            )
+                          : Text(title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: 20.0, fontWeight: FontWeight.bold)),
                       SizedBox(
                         height: 10.0,
                       ),
