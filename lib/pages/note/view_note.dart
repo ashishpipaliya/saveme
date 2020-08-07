@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:saveme/shared/constants.dart';
 import 'package:saveme/model/user_model.dart';
 import 'package:saveme/services/database.dart';
 
 class ViewNote extends StatefulWidget {
   final String title, description, lastEdit, docId;
-  const ViewNote(
-      {Key key, this.title, this.description, this.lastEdit, this.docId})
+  String color;
+  ViewNote(
+      {Key key,
+      this.title,
+      this.description,
+      this.lastEdit,
+      this.docId,
+      this.color})
       : super(key: key);
   @override
   _ViewNoteState createState() => _ViewNoteState();
@@ -29,14 +36,20 @@ class _ViewNoteState extends State<ViewNote> {
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     DatabaseService dbService = DatabaseService(uid: "notes-${user.uid}");
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+    Color color =
+        widget.docId == null ? Colors.white : Color(int.parse(widget.color));
 
     return Scaffold(
+      key: scaffoldKey,
+      backgroundColor: color,
       appBar: AppBar(
+        backgroundColor: color,
         actions: [
           IconButton(
               icon: Icon(Icons.delete_outline),
               onPressed: () async {
-                dbService.deleteNote("notes-${user.uid}", widget.docId);
+                dbService.deleteNote(widget.docId);
                 Navigator.pop(context);
               }),
           IconButton(
@@ -44,16 +57,28 @@ class _ViewNoteState extends State<ViewNote> {
             onPressed: () {
               if (_title.text.isNotEmpty || _description.text.isNotEmpty) {
                 if (widget.docId == null) {
-                  dbService.addNote(_title.text, _description.text);
+                  dbService.addNote(
+                      _title.text, _description.text, white.toString());
                 } else {
-                  dbService.updateNote("notes-${user.uid}", widget.docId,
-                      _title.text, _description.text);
+                  dbService.updateNote(
+                    "notes-${user.uid}",
+                    widget.docId,
+                    _title.text,
+                    _description.text,
+                  );
                 }
+                Navigator.pop(context);
               } else {
-                Scaffold.of(context).showSnackBar(
-                    SnackBar(content: Text("Empty note discarded")));
+                Navigator.pop(context);
+                return Fluttertoast.showToast(
+                    msg: "Empty note discarded",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    backgroundColor: Colors.black,
+                    textColor: Colors.white,
+                    timeInSecForIosWeb: 1,
+                    fontSize: 16.0);
               }
-              Navigator.pop(context);
             },
           ),
         ],
@@ -63,14 +88,24 @@ class _ViewNoteState extends State<ViewNote> {
           onWillPop: () async {
             if (_title.text.isNotEmpty || _description.text.isNotEmpty) {
               if (widget.docId == null) {
-                dbService.addNote(_title.text, _description.text);
+                dbService.addNote(
+                  _title.text,
+                  _description.text,
+                  widget.color,
+                );
               } else {
                 dbService.updateNote("notes-${user.uid}", widget.docId,
                     _title.text, _description.text);
               }
             } else {
-              Scaffold.of(context).showSnackBar(
-                  SnackBar(content: Text("Empty note discarded")));
+              return Fluttertoast.showToast(
+                  msg: "Empty note discarded",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  backgroundColor: Colors.black,
+                  textColor: Colors.white,
+                  timeInSecForIosWeb: 1,
+                  fontSize: 16.0);
             }
             return true;
           },
@@ -108,25 +143,107 @@ class _ViewNoteState extends State<ViewNote> {
       ),
       bottomNavigationBar: Container(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButton(icon: Icon(Icons.add_box), onPressed: () {}),
             Text("Last Edit ${widget.lastEdit ?? lastEdit} "),
-            IconButton(icon: Icon(Icons.menu), onPressed: () {})
+            SizedBox(
+              height: 25.0,
+              width: 150.0,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  ColorButton(
+                    color: lightBlue,
+                    onPressed: () {
+                      setState(() {
+                        dbService.updateColor(widget.docId, lightBlueC);
+                      });
+                    },
+                  ),
+                  ColorButton(
+                    color: lightBrown,
+                    onPressed: () {
+                      setState(() {
+                        dbService.updateColor(widget.docId, lightBrownC);
+                      });
+                    },
+                  ),
+                  ColorButton(
+                    color: lightCyan,
+                    onPressed: () {
+                      setState(() {
+                        dbService.updateColor(widget.docId, lightCyanC);
+                      });
+                    },
+                  ),
+                  ColorButton(
+                    color: lightGreen,
+                    onPressed: () {
+                      setState(() {
+                        dbService.updateColor(widget.docId, lightGreenC);
+                      });
+                    },
+                  ),
+                  ColorButton(
+                    color: lightGrey,
+                    onPressed: () {
+                      setState(() {
+                        dbService.updateColor(widget.docId, lightGreyC);
+                      });
+                    },
+                  ),
+                  ColorButton(
+                    color: lightOrange,
+                    onPressed: () {
+                      setState(() {
+                        dbService.updateColor(widget.docId, lightOrangeC);
+                      });
+                    },
+                  ),
+                  ColorButton(
+                    color: lightRed,
+                    onPressed: () {
+                      setState(() {
+                        dbService.updateColor(widget.docId, lightRedC);
+                      });
+                    },
+                  ),
+                  ColorButton(
+                    color: white,
+                    onPressed: () {
+                      setState(() {
+                        dbService.updateColor(widget.docId, whiteC);
+                      });
+                    },
+                  ),
+                ],
+              ),
+            )
           ],
         ),
-      ),
-    );
-  }
-
-  void _showToast(BuildContext context) {
-    final scaffold = Scaffold.of(context);
-    scaffold.showSnackBar(
-      SnackBar(
-        content: const Text('Empty note discarded'),
       ),
     );
   }
 }
 
 const inputDecoration = InputDecoration(border: InputBorder.none);
+
+class ColorButton extends StatelessWidget {
+  Color color;
+  Function onPressed;
+
+  ColorButton({this.color, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: CircleAvatar(
+        radius: 20,
+        backgroundColor: color,
+        foregroundColor: color,
+      ),
+    );
+  }
+}

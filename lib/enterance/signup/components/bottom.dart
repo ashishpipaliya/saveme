@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:saveme/constants.dart';
+import 'package:saveme/shared/constants.dart';
 
 class SocialIcon extends StatelessWidget {
   final String iconSrc;

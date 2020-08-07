@@ -15,11 +15,10 @@ class MyApp extends StatelessWidget {
       value: AuthService().user,
       child: MaterialApp(
         theme: ThemeData(
-            primaryColor: Colors.white,
-            accentColor: Colors.white,
-            iconTheme: IconThemeData(color: Colors.grey),
-            appBarTheme:
-                AppBarTheme(color: Colors.transparent, elevation: 0.0)),
+          primaryColor: Colors.white,
+          accentColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.grey),
+        ),
         home: Wrapper(),
       ),
     );

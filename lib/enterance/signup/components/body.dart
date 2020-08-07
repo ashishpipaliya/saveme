@@ -6,7 +6,7 @@ import 'package:saveme/enterance/components/rounded_input_field.dart';
 import 'package:saveme/enterance/components/rounded_password_field.dart';
 import 'package:saveme/enterance/signup/components/bottom.dart';
 import 'package:saveme/enterance/signup/components/divider.dart';
-import 'package:saveme/enterance/welcome/components/background.dart';
+import 'package:saveme/enterance/signup/components/background.dart';
 import 'package:saveme/services/auth.dart';
 
 class Body extends StatefulWidget {
