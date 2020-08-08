@@ -3,7 +3,6 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:saveme/shared/page_route.dart';
 import 'package:saveme/pages/note/all_notes.dart';
 import 'package:saveme/pages/note/view_note.dart';
-import 'package:saveme/services/auth.dart';
 import 'package:saveme/shared/appbar.dart';
 
 class HomePage extends StatelessWidget {

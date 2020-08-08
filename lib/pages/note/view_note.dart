@@ -32,16 +32,23 @@ class _ViewNoteState extends State<ViewNote> {
     _description = TextEditingController(text: widget.description);
   }
 
+  void dispose() {
+    _title.dispose();
+    _description.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     final user = Provider.of<User>(context);
     DatabaseService dbService = DatabaseService(uid: "notes-${user.uid}");
-    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+    // final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     Color color =
         widget.docId == null ? Colors.white : Color(int.parse(widget.color));
 
     return Scaffold(
-      key: scaffoldKey,
+      // key: scaffoldKey,
       backgroundColor: color,
       appBar: AppBar(
         backgroundColor: color,
@@ -52,35 +59,35 @@ class _ViewNoteState extends State<ViewNote> {
                 dbService.deleteNote(widget.docId);
                 Navigator.pop(context);
               }),
-          IconButton(
-            icon: Icon(Icons.update),
-            onPressed: () {
-              if (_title.text.isNotEmpty || _description.text.isNotEmpty) {
-                if (widget.docId == null) {
-                  dbService.addNote(
-                      _title.text, _description.text, white.toString());
-                } else {
-                  dbService.updateNote(
-                    "notes-${user.uid}",
-                    widget.docId,
-                    _title.text,
-                    _description.text,
-                  );
-                }
-                Navigator.pop(context);
-              } else {
-                Navigator.pop(context);
-                return Fluttertoast.showToast(
-                    msg: "Empty note discarded",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    backgroundColor: Colors.black,
-                    textColor: Colors.white,
-                    timeInSecForIosWeb: 1,
-                    fontSize: 16.0);
-              }
-            },
-          ),
+          // IconButton(
+          //   icon: Icon(Icons.update),
+          //   onPressed: () {
+          //     if (_title.text.isNotEmpty || _description.text.isNotEmpty) {
+          //       if (widget.docId == null) {
+          //         dbService.addNote(
+          //             _title.text, _description.text, white.toString());
+          //       } else {
+          //         dbService.updateNote(
+          //           "notes-${user.uid}",
+          //           widget.docId,
+          //           _title.text,
+          //           _description.text,
+          //         );
+          //       }
+          //       Navigator.pop(context);
+          //     } else {
+          //       Navigator.pop(context);
+          //       return Fluttertoast.showToast(
+          //           msg: "Empty note discarded",
+          //           toastLength: Toast.LENGTH_SHORT,
+          //           gravity: ToastGravity.BOTTOM,
+          //           backgroundColor: Colors.black,
+          //           textColor: Colors.white,
+          //           timeInSecForIosWeb: 1,
+          //           fontSize: 16.0);
+          //     }
+          //   },
+          // ),
         ],
       ),
       body: SafeArea(
@@ -115,25 +122,26 @@ class _ViewNoteState extends State<ViewNote> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Column(
-                    children: [
-                      TextField(
-                        controller: _title,
-                        maxLines: null,
-                        decoration: inputDecoration.copyWith(hintText: "Title"),
-                        style: TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      TextField(
-                        controller: _description,
-                        maxLines: null,
-                        decoration: inputDecoration.copyWith(hintText: "Note"),
-                        style: TextStyle(fontSize: 18.0),
-                      ),
-                    ],
+                  TextField(
+                    controller: _title,
+                    maxLines: null,
+                    cursorColor: Colors.black54,
+                    decoration: inputDecoration.copyWith(hintText: "Title"),
+                    style:
+                        TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  Container(
+                    height: size.height * 0.50,
+                    child: TextField(
+                      controller: _description,
+                      maxLines: null,
+                      cursorColor: Colors.black54,
+                      decoration: inputDecoration.copyWith(hintText: "Note"),
+                      style: TextStyle(fontSize: 18.0),
+                    ),
                   ),
                 ],
               ),
@@ -142,14 +150,17 @@ class _ViewNoteState extends State<ViewNote> {
         ),
       ),
       bottomNavigationBar: Container(
+        height: 50.0,
+        padding: EdgeInsets.symmetric(horizontal: 10.0),
+        color: Colors.black12,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(icon: Icon(Icons.add_box), onPressed: () {}),
+            // IconButton(icon: Icon(Icons.add_box), onPressed: () {}),
             Text("Last Edit ${widget.lastEdit ?? lastEdit} "),
             SizedBox(
-              height: 25.0,
-              width: 150.0,
+              height: size.height * 0.040,
+              width: size.width * 0.50,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [

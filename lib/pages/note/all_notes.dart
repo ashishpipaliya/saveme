@@ -49,76 +49,61 @@ class _AllNotesState extends State<AllNotes> {
             crossAxisCount: 4,
             itemCount: data.length ?? 0,
             itemBuilder: (context, index) {
-              var title = data[index]["title"];
-              var description = data[index]["description"];
+              var title = data[index]["title"] ?? "";
+              var description = data[index]["description"] ?? "";
               var lastEdit = data[index]["lastEdit"];
               var docId = data[index]["docId"];
               var bgColor = data[index]["bgColor"] ?? whiteC;
 
-              return Dismissible(
-                key: ObjectKey(data.elementAt(index)),
-                direction: DismissDirection.horizontal,
-                resizeDuration: Duration(milliseconds: 200),
-                onDismissed: (direction) {
-                  setState(() {
-                    data.removeAt(index);
-                    DatabaseService().deleteNote(docId);
-                  });
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text("note deleted"),
-                  ));
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      FadeRoute(
+                        page: ViewNote(
+                            title: title,
+                            description: description,
+                            lastEdit: lastEdit,
+                            docId: docId,
+                            color: bgColor),
+                      ));
                 },
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        FadeRoute(
-                          page: ViewNote(
-                              title: title,
-                              description: description,
-                              lastEdit: lastEdit,
-                              docId: docId,
-                              color: bgColor),
-                        ));
-                  },
-                  child: Container(
-                    margin: EdgeInsets.all(4.0),
-                    decoration: BoxDecoration(
-                        color: Color(int.parse(bgColor)) ?? Colors.white,
-                        border: Border.all(
-                            width: 1.0,
-                            style: BorderStyle.solid,
-                            color: Colors.grey.shade300),
-                        borderRadius: BorderRadius.circular(5.0)),
-                    padding: EdgeInsets.all(5.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        title.length == 0
-                            ? Container(
-                                width: 0.0,
-                                height: 0.0,
-                              )
-                            : Text(title,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold)),
-                        SizedBox(
-                          height: 10.0,
+                child: Container(
+                  margin: EdgeInsets.all(4.0),
+                  decoration: BoxDecoration(
+                      color: Color(int.parse(bgColor)) ?? Colors.white,
+                      border: Border.all(
+                          width: 1.0,
+                          style: BorderStyle.solid,
+                          color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(5.0)),
+                  padding: EdgeInsets.all(5.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      title.length == 0
+                          ? Container(
+                              width: 0.0,
+                              height: 0.0,
+                            )
+                          : Text(title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: 20.0, fontWeight: FontWeight.bold)),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Expanded(
+                        child: Text(
+                          description,
+                          maxLines: 3,
+                          overflow: TextOverflow.fade,
+                          style: TextStyle(fontSize: 16.0),
                         ),
-                        Expanded(
-                          child: Text(
-                            description,
-                            maxLines: 3,
-                            overflow: TextOverflow.fade,
-                            style: TextStyle(fontSize: 16.0),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               );
