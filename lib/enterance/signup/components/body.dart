@@ -130,11 +130,20 @@ class _BodyState extends State<Body> {
                   SocialIcon(
                     iconSrc: "assets/icons/google.svg",
                     press: () async {
+                      setState(() {
+                        loading = true;
+                      });
                       dynamic result = await _auth.googleSignIn();
                       if (result == null) {
-                        print("couldn't sign in");
+                        setState(() {
+                          loading = false;
+                        });
+                        // print("couldn't sign in");
                       } else {
-                        print("signed in using google");
+                        setState(() {
+                          loading = false;
+                        });
+                        // print("signed in using google");
                       }
                     },
                   ),

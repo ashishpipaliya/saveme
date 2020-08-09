@@ -18,7 +18,6 @@ class DatabaseService extends ChangeNotifier {
       "docId": docRef.documentID,
       "bgColor": "0xFFffffff"
     });
-    notifyListeners();
   }
 
   readNote() async {
@@ -26,20 +25,17 @@ class DatabaseService extends ChangeNotifier {
     colRef.snapshots().listen((snapshots) {
       data = snapshots.documents;
     });
-    notifyListeners();
   }
 
   Future deleteNote(docId) async {
     CollectionReference colRef = Firestore.instance.collection(uid);
     await colRef.document(docId).delete();
-    notifyListeners();
   }
 
   Future updateNote(uid, docId, String title, String description) async {
     CollectionReference colRef = Firestore.instance.collection(uid);
     await colRef.document(docId).updateData(
         {"title": title, "description": description, "lastEdit": lastEdit});
-    notifyListeners();
   }
 
   Future updateColor(docId, String color) async {
@@ -47,6 +43,5 @@ class DatabaseService extends ChangeNotifier {
     if (docId != null) {
       await colRef.document(docId).updateData({"bgColor": color});
     }
-    notifyListeners();
   }
 }

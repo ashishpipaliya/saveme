@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:saveme/shared/constants.dart';
 
 class NoteModel extends ChangeNotifier {
   final String title, description, lastEdit, docId, bgColor;
