@@ -6,7 +6,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:saveme/shared/constants.dart';
 import 'package:saveme/shared/page_route.dart';
 import 'package:saveme/pages/note/view_note.dart';
-import 'package:saveme/services/database.dart';
 
 class AllNotes extends StatefulWidget {
   @override
